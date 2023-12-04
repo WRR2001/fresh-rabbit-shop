@@ -10,9 +10,9 @@ const onChange: UniHelper.SwiperOnChange = (ev) => {
 }
 
 //定义props接收
-const props = defineProps<{ list: BannerItem[] }>()
+defineProps<{ list: BannerItem[] }>()
 
-console.log(props)
+// console.log(props)
 </script>
 
 <template>
