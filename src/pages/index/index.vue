@@ -40,18 +40,27 @@ onLoad(() => {
 <template>
   <!-- 导航栏组件 -->
   <CustomNavbar></CustomNavbar>
-  <!-- 轮播组件 -->
-  <XtxSwiper :list="bannerList"></XtxSwiper>
-  <!-- 类目面板 -->
-  <CategoryPanel :list="categoryList"></CategoryPanel>
-  <!-- 热门推荐 -->
-  <HotPanel :list="homehotList"></HotPanel>
-
-  <view class="index">index</view>
+  <scroll-view class="scroll-view" scroll-y>
+    <!-- 轮播组件 -->
+    <XtxSwiper :list="bannerList"></XtxSwiper>
+    <!-- 类目面板 -->
+    <CategoryPanel :list="categoryList"></CategoryPanel>
+    <!-- 热门推荐 -->
+    <HotPanel :list="homehotList"></HotPanel>
+    <!-- 猜你喜欢 -->
+    <XtxGuess></XtxGuess>
+  </scroll-view>
 </template>
 
 <style lang="scss">
 page {
   background-color: #f7f7f7;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.scroll-view {
+  flex: 1;
 }
 </style>
