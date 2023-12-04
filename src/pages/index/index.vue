@@ -5,6 +5,7 @@ import { BannerItem } from '@/types/home'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 import CustomNavbar from './components/CustomNavbar.vue'
+import CategoryPanel from './components/CategoryPanel.vue'
 
 const bannerList = ref<BannerItem[]>([])
 
@@ -24,10 +25,14 @@ onLoad(() => {
   <CustomNavbar></CustomNavbar>
   <!-- 轮播组件 -->
   <XtxSwiper :list="bannerList"></XtxSwiper>
+  <!-- 类目面板 -->
+  <CategoryPanel></CategoryPanel>
 
   <view class="index">index</view>
 </template>
 
 <style lang="scss">
-//
+page {
+  background-color: #f7f7f7;
+}
 </style>

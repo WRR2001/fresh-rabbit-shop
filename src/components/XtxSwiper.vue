@@ -10,15 +10,14 @@ const onChange: UniHelper.SwiperOnChange = (ev) => {
 }
 
 //定义props接收
-const props = defineProps<{
-  list: BannerItem[]
-}>()
+const props = defineProps<{ list: BannerItem[] }>()
 
 console.log(props)
 </script>
 
 <template>
   <view class="carousel">
+    <!-- 轮播图 -->
     <swiper :circular="true" :autoplay="false" :interval="3000" @change="onChange">
       <swiper-item v-for="item in list" :key="item.id">
         <navigator url="/pages/index/index" hover-class="none" class="navigator">
@@ -26,6 +25,7 @@ console.log(props)
         </navigator>
       </swiper-item>
     </swiper>
+
     <!-- 指示点 -->
     <view class="indicator">
       <text
