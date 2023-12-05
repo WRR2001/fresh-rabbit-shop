@@ -6,7 +6,7 @@ import { onMounted, ref } from 'vue'
 
 //分页参数
 const pageParams: Required<PageParams> = {
-  page: 30,
+  page: 1,
   pageSize: 10,
 }
 //已结束标记
