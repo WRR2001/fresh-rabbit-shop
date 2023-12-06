@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { onReady } from '@dcloudio/uni-app'
+import { onLoad } from '@dcloudio/uni-app'
+// import { getHotrecommendAPI } from '@/services/hot'
+import { getHotrecommendAPI } from '../../services/hot'
 
 // 热门推荐页 标题和url
 const urlMap = [
@@ -13,10 +15,19 @@ const urlMap = [
 const query = defineProps<{ type: string }>()
 // console.log(query)
 
-onReady(() => {
-  const currUrlMap = urlMap.find((v) => v.type === query.type)
-  //动态设置标题
-  uni.setNavigationBarTitle({ title: currUrlMap!.title })
+const currUrlMap = urlMap.find((v) => v.type === query.type)
+//动态设置标题
+uni.setNavigationBarTitle({ title: currUrlMap!.title })
+
+//获取热门推荐数据
+const getHotrecommendData = async () => {
+  const res = await getHotrecommendAPI(currUrlMap!.url)
+  console.log(res)
+}
+
+//页面加载
+onLoad(() => {
+  getHotrecommendData()
 })
 </script>
 
