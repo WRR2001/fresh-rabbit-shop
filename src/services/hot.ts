@@ -1,4 +1,5 @@
 import { PageParams } from '@/types/global'
+import { HotResult } from '@/types/hot'
 import { http } from '@/utils/http'
 
 type HotParams = PageParams & { subType?: string }
@@ -9,7 +10,7 @@ type HotParams = PageParams & { subType?: string }
  */
 
 export const getHotrecommendAPI = (url: string, data?: HotParams) => {
-  return http({
+  return http<HotResult>({
     method: 'GET',
     url,
     data,
