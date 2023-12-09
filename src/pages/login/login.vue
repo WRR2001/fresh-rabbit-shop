@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { postLoginWxMinAPI, postLoginWxMinSimpleAPI } from '@/services/login'
+import { useMemberStore } from '@/stores/modules/member'
+import { LoginResult } from '@/types/member'
 import { onLoad } from '@dcloudio/uni-app'
 
 //获取code登录凭证
@@ -9,13 +11,15 @@ onLoad(async () => {
   code = res.code
 })
 
-//获取用户手机号码
+//获取用户手机号码 (企业账号)
 const onGetPhoneNumber: UniHelper.ButtonOnGetphonenumber = async (ev) => {
   //   const encryptedData = ev.detail!.encryptedData!
   //   const iv = ev.detail!.iv!
   //   const res = await postLoginWxMinAPI({code, encryptedData, iv
   //   })
   //   console.log(res)
+  //   loginSuccess(res.result)
+
   uni.showToast({
     title: '暂未开放此功能',
     icon: 'error',
@@ -25,11 +29,23 @@ const onGetPhoneNumber: UniHelper.ButtonOnGetphonenumber = async (ev) => {
 //模拟手机号码快捷登录
 const onGetPhoneNumberSimple = async () => {
   const res = await postLoginWxMinSimpleAPI('15199674572')
-  console.log(res)
+  loginSuccess(res.result)
+}
+
+//登录成功所做的操作
+const loginSuccess = (profile: LoginResult) => {
+  //登录成功提示
   uni.showToast({
     title: '登录成功',
     icon: 'success',
   })
+  //保存会员信息
+  const memberStore = useMemberStore()
+  memberStore.setProfile(profile)
+  //页面跳转
+  setTimeout(() => {
+    uni.switchTab({ url: '/pages/my/my' })
+  }, 900)
 }
 </script>
 
