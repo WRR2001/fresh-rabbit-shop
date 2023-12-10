@@ -25,7 +25,6 @@
 				"navigationBarTitleText": "我的",
 				"navigationStyle": "custom",
 				"navigationBarTextStyle": "white"
-
 			}
 		},
 		{
@@ -97,5 +96,26 @@
 				"selectedIconPath": "static/tabs/user_selected.png"
 			}
 		]
+	},
+	"subPackages": [
+		{
+			"root": "pagesMember",
+			"pages": [
+				{
+					"path": "settings/settings",
+					"style": {
+						"navigationBarTitleText": "设置"
+					}
+				}
+			]
+		}
+	],
+	"preloadRule": {
+		"pages/my/my": {
+			"network": "all",
+			"packages": [
+				"pagesMember"
+			]
+		}
 	}
 }
