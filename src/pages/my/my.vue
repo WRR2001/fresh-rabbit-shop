@@ -28,6 +28,7 @@ const { guessRef, onScrollTolower } = useGuessList()
       <!-- 情况1：已登录 -->
       <view class="overview" v-if="memberStore.profile">
         <navigator url="/pagesMember/profile/profile" hover-class="none">
+          <!-- 头像 -->
           <image class="avatar" mode="aspectFill" :src="memberStore.profile.avatar"></image>
         </navigator>
         <view class="meta">
