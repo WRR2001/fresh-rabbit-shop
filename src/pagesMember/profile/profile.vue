@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { getMemberProfileAPI } from '@/services/profile'
+import { getMemberProfileAPI, putMemberProfileAPI } from '@/services/profile'
+import { useMemberStore } from '@/stores'
 import { ProfileDetail } from '@/types/member'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
@@ -8,7 +9,7 @@ import { ref } from 'vue'
 const { safeAreaInsets } = uni.getSystemInfoSync()
 
 //获取个人信息
-const profile = ref<ProfileDetail>()
+const profile = ref({} as ProfileDetail)
 const getMemberProfileData = async () => {
   const res = await getMemberProfileAPI()
   profile.value = res.result
@@ -17,6 +18,62 @@ const getMemberProfileData = async () => {
 onLoad(() => {
   getMemberProfileData()
 })
+
+const memberStore = useMemberStore()
+
+//修改头像
+const onAvatarChange = () => {
+  //调用拍照/选择图片
+  uni.chooseMedia({
+    //文件格式
+    count: 1,
+    //文件类型
+    mediaType: ['image'],
+    success: (res) => {
+      const { tempFilePath } = res.tempFiles[0]
+      //文件上传
+      uni.uploadFile({
+        url: '/member/profile/avatar',
+        name: 'file',
+        filePath: tempFilePath,
+        success: (res) => {
+          if (res.statusCode === 200) {
+            const avatar = JSON.parse(res.data).result.avatar
+            //个人信息二级页面更新
+            profile.value!.avatar = avatar
+            //Store更新
+            memberStore.profile!.avatar = avatar
+            uni.showToast({
+              title: '头像修改成功',
+              icon: 'success',
+            })
+          } else {
+            uni.showToast({
+              title: '头像修改失败',
+              icon: 'error',
+            })
+          }
+        },
+      })
+    },
+  })
+}
+
+//保存提交表单
+const onSubmit = async () => {
+  const res = await putMemberProfileAPI({
+    nickname: profile.value?.nickname,
+  })
+  //更新Store昵称
+  memberStore.profile!.nickname = res.result.nickname
+  uni.showToast({
+    title: '保存成功',
+    icon: 'success',
+  })
+  setTimeout(() => {
+    uni.navigateBack()
+  }, 850)
+}
 </script>
 
 <template>
@@ -28,7 +85,7 @@ onLoad(() => {
     </view>
     <!-- 头像 -->
     <view class="avatar">
-      <view class="avatar-content">
+      <view class="avatar-content" @tap="onAvatarChange">
         <image class="image" :src="profile?.avatar" mode="aspectFill" />
         <text class="text">点击修改头像</text>
       </view>
@@ -43,7 +100,7 @@ onLoad(() => {
         </view>
         <view class="form-item">
           <text class="label">昵称</text>
-          <input class="input" type="text" placeholder="请填写昵称" :value="profile?.nickname" />
+          <input class="input" type="text" placeholder="请填写昵称" v-model="profile!.nickname" />
         </view>
         <view class="form-item">
           <text class="label">性别</text>
@@ -84,7 +141,7 @@ onLoad(() => {
         </view>
       </view>
       <!-- 提交按钮 -->
-      <button class="form-button">保 存</button>
+      <button class="form-button" @tap="onSubmit">保 存</button>
     </view>
   </view>
 </template>
