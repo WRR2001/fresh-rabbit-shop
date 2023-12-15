@@ -56,7 +56,7 @@ const onSwitchChange: UniHelper.SwitchOnChange = (ev) => {
   form.value.isDefault = ev.detail.value ? 1 : 0
 }
 
-//定义校验规则
+//定义校验规则 rules
 const rules: UniHelper.UniFormsRules = {
   receiver: {
     rules: [
