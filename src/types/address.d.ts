@@ -1,3 +1,5 @@
+import { http } from '@/utils/http'
+
 /** 添加收货地址: 请求参数 */
 export type AddressParams = {
   /** 收货人姓名 */
