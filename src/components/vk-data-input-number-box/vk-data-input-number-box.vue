@@ -189,7 +189,7 @@ export default {
 				// 因为inputVal变化后，会触发this.handleChange()，在其中changeFromInner会再次被设置为true，
 				// 造成外面修改值，也导致被认为是内部修改的混乱，这里进行this.$nextTick延时，保证在运行周期的最后处
 				// 将changeFromInner设置为false
-				this.$nextTick(function () {
+				this.$nextTick(function() {
 					this.changeFromInner = false;
 				});
 			}
@@ -234,8 +234,8 @@ export default {
 			inputVal: 1, // 输入框中的值，不能直接使用props中的value，因为应该改变props的状态
 			timer: null, // 用作长按的定时器
 			changeFromInner: false, // 值发生变化，是来自内部还是外部
-			innerChangeTimer: null,// 内部定时器
-			showInput: false,
+			innerChangeTimer: null ,// 内部定时器
+			showInput:false,
 		};
 	},
 	created() {
@@ -258,8 +258,8 @@ export default {
 	},
 	methods: {
 		// 空点击事件，主要用于解决PC端H5由于无click事件导致触摸位置不准确的问题
-		emptyClick() {
-
+		emptyClick(){
+			
 		},
 		// 触摸事件开始
 		btnTouchStart(callback) {
@@ -467,7 +467,6 @@ export default {
 	color: #c8c9cc !important;
 	background-color: #f2f3f5 !important;
 }
-
 .num-btn {
 	font-weight: 550;
 	line-height: 50rpx;
