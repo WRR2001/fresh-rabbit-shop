@@ -6,9 +6,11 @@ import { computed, ref } from 'vue'
 import ServicePanel from './components/ServicePanel.vue'
 import AddressPanel from './components/AddressPanel.vue'
 import {
+  SkuPopupEvent,
   SkuPopupInstance,
   SkuPopupLocaldata,
 } from '@/components/vk-data-goods-sku-popup/vk-data-goods-sku-popup'
+import { postMemberCartAPI } from '@/services/cart'
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
@@ -117,6 +119,16 @@ const SkUPopupRef = ref<SkuPopupInstance>()
 const selectArrText = computed(() => {
   return SkUPopupRef.value?.selectArr?.join(' ').trim() || '请选择商品规格'
 })
+
+//加入购物车事件
+const onAddCart = async (ev: SkuPopupEvent) => {
+  await postMemberCartAPI({ skuId: ev._id, count: ev.buy_num })
+  uni.showToast({
+    title: '添加成功',
+    icon: 'success',
+  })
+  isShowSKU.value = false
+}
 </script>
 
 <template>
@@ -129,6 +141,7 @@ const selectArrText = computed(() => {
     buy-now-background-color="#27BA98"
     ref="SkUPopupRef"
     :actived-style="{ color: '#29BA98', borderColor: '#29BA98', backgroundColor: '#e9f8f5' }"
+    @add-cart="onAddCart"
   >
   </vk-data-goods-sku-popup>
   <scroll-view scroll-y class="viewport">
