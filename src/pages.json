@@ -40,6 +40,12 @@
 			}
 		},
 		{
+			"path": "pages/cart/cart_copy",
+			"style": {
+				"navigationBarTitleText": "购物车"
+			}
+		},
+		{
 			"path": "pages/login/login",
 			"style": {
 				"navigationBarTitleText": "登录"
@@ -89,6 +95,7 @@
 				"iconPath": "static/tabs/cart_default.png",
 				"selectedIconPath": "static/tabs/cart_selected.png"
 			},
+			
 			{
 				"text": "我的",
 				"pagePath": "pages/my/my",
