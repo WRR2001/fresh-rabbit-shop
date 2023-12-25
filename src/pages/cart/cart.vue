@@ -73,6 +73,38 @@ const onChangeSelectedAll = () => {
   //后端数据更新
   putMemberCartSelectedAPI({ selected: _isSelectedAll })
 }
+
+//计算选中单品列表
+const selectedCartList = computed(() => {
+  return cartList.value.filter((v) => v.selected)
+})
+
+//计算选中总件数
+const selectedCartListCount = computed(() => {
+  return selectedCartList.value.reduce((sum, item) => sum + item.count, 0)
+})
+
+//计算选中总金额
+const selectedCartListMoney = computed(() => {
+  return selectedCartList.value
+    .reduce((sum, item) => sum + item.count * item.nowPrice, 0)
+    .toFixed(2)
+})
+
+//
+const gotoPayment = () => {
+  if (selectedCartListCount.value === 0) {
+    return uni.showToast({
+      title: '请先选择商品',
+      icon: 'error',
+    })
+  }
+  //跳转到结算页
+  uni.showToast({
+    title: '正在维护',
+    icon: 'error',
+  })
+}
 </script>
 
 <template>
@@ -84,7 +116,7 @@ const onChangeSelectedAll = () => {
         <!-- 优惠提示 -->
         <view class="tips">
           <text class="label">满减</text>
-          <text class="desc">满1件, 即可享受9折优惠</text>
+          <text class="desc">满2件, 即可享受9折优惠</text>
         </view>
         <!-- 滑动操作分区 -->
         <uni-swipe-action>
@@ -140,12 +172,18 @@ const onChangeSelectedAll = () => {
         </navigator>
       </view>
       <!-- 吸底工具栏 -->
-      <view class="toolbar">
+      <view class="toolbar" style="z-index: 99">
         <text @tap="onChangeSelectedAll" class="all" :class="{ checked: isSelectedAll }">全选</text>
         <text class="text">合计:</text>
-        <text class="amount">100</text>
+        <text class="amount">{{ selectedCartListMoney }}</text>
         <view class="button-grounp">
-          <view class="button payment-button" :class="{ disabled: true }"> 去结算(10) </view>
+          <view
+            @tap="gotoPayment"
+            class="button payment-button"
+            :class="{ disabled: selectedCartListCount === 0 }"
+          >
+            去结算({{ selectedCartListCount }})</view
+          >
         </view>
       </view>
     </template>
