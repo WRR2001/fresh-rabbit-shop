@@ -100,10 +100,7 @@ const gotoPayment = () => {
     })
   }
   //跳转到结算页
-  uni.showToast({
-    title: '正在维护',
-    icon: 'error',
-  })
+  uni.navigateTo({ url: '/pagesOrder/create/create' })
 }
 </script>
 
