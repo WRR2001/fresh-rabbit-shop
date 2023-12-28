@@ -129,6 +129,11 @@ const onAddCart = async (ev: SkuPopupEvent) => {
   })
   isShowSKU.value = false
 }
+
+//立即购买事件
+const onBuyNow = (ev: SkuPopupEvent) => {
+  uni.navigateTo({ url: `/pagesOrder/create/create?skuId=${ev._id}&count=${ev.buy_num}` })
+}
 </script>
 
 <template>
@@ -142,6 +147,7 @@ const onAddCart = async (ev: SkuPopupEvent) => {
     ref="SkUPopupRef"
     :actived-style="{ color: '#29BA98', borderColor: '#29BA98', backgroundColor: '#e9f8f5' }"
     @add-cart="onAddCart"
+    @buy-now="onBuyNow"
   >
   </vk-data-goods-sku-popup>
   <scroll-view scroll-y class="viewport">
