@@ -78,6 +78,12 @@ const getMemberOrderByIdData = async () => {
 onLoad(() => {
   getMemberOrderByIdData()
 })
+
+//倒计时结束事件
+const onTimeup = () => {
+  //修改订单状态为已取消
+  order.value!.orderState = OrderState.YiQuXiao
+}
 </script>
 
 <template>
@@ -104,7 +110,14 @@ onLoad(() => {
           <view class="tips">
             <text class="money">应付金额: ¥ 99.00</text>
             <text class="time">支付剩余</text>
-            00 时 29 分 59 秒
+            <uni-countdown
+              :second="order.countdown"
+              @timeup="onTimeup"
+              color="#fff"
+              splitor-color="#fff"
+              :show-day="false"
+              :show-colon="false"
+            />
           </view>
           <view class="button">去支付</view>
         </template>
@@ -130,7 +143,7 @@ onLoad(() => {
         <!-- 订单物流信息 -->
         <view v-for="item in 1" :key="item" class="item">
           <view class="message">
-            您已在广州市天河区黑马程序员完成取件，感谢使用菜鸟驿站，期待再次为您服务。
+            您已在浙江省杭州市余杭区xx公寓完成取件，感谢使用菜鸟驿站，期待再次为您服务。
           </view>
           <view class="date"> 2023-04-14 13:14:20 </view>
         </view>
