@@ -19,7 +19,7 @@ export const getPayWxPayMiniPayAPI = (data: { orderId: string }) => {
 export const getPayMockAPI = (data: { orderId: string }) => {
   return http({
     method: 'GET',
-    url: '/pay/wxPay/miniPay',
+    url: '/pay/mock',
     data,
   })
 }
