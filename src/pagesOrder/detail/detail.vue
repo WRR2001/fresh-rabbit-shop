@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { useGuessList } from '@/composables'
-import { getMemberOrderAPI } from '@/services/order'
+import {
+  getMemberOrderAPI,
+  getMemberOrderConsignmentByIdAPI,
+  putMemberOrderReceiptByIdAPI,
+} from '@/services/order'
 import { onLoad, onReady } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 import { OrderResult } from '@/types/order'
@@ -99,6 +103,37 @@ const onOrderPay = async () => {
   //关闭当前页，再跳转支付结果页
   uni.redirectTo({ url: `/pagesOrder/payment/payment?id=${query.id}` })
 }
+
+//是否为开发环境
+const isDev = import.meta.env.DEV
+
+//模拟发货
+const onOrderSend = async () => {
+  if (isDev) {
+    await getMemberOrderConsignmentByIdAPI(query.id)
+    uni.showToast({
+      title: '模拟发货完成',
+      icon: 'success',
+    })
+    //主动更新订单状态
+    order.value!.orderState = OrderState.DaiShouHuo
+  }
+}
+
+// 确认收货
+const onOrderConfirm = () => {
+  //二次确认弹窗
+  uni.showModal({
+    content: '为保障您的权益，请收到货并确认无误后，再确认收货',
+    success: async (success) => {
+      if (success.confirm) {
+        const res = await putMemberOrderReceiptByIdAPI(query.id)
+        // 更新订单状态
+        order.value = res.result
+      }
+    },
+  })
+}
 </script>
 
 <template>
@@ -149,7 +184,21 @@ const onOrderPay = async () => {
               再次购买
             </navigator>
             <!-- 待发货状态：模拟发货,开发期间使用,用于修改订单状态为已发货 -->
-            <view v-if="false" class="button"> 模拟发货 </view>
+            <view
+              v-if="isDev && order.orderState == OrderState.DaiFaHuo"
+              @tap="onOrderSend"
+              class="button"
+            >
+              模拟发货
+            </view>
+            <!-- 待收货状态: 展示确认收货按钮 -->
+            <view
+              v-if="order.orderState === OrderState.DaiShouHuo"
+              @tap="onOrderConfirm"
+              class="button"
+            >
+              确认收货
+            </view>
           </view>
         </template>
       </view>
