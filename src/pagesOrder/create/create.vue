@@ -39,7 +39,7 @@ const getMemberOrderPreData = async () => {
       skuId: query.skuId,
     })
     orderPre.value = res.result
-    console.log(query)
+    // console.log(query)
   } else {
     const res = await getMemberOrderPreAPI()
     orderPre.value = res.result

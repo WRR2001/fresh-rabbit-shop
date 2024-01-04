@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { useGuessList } from '@/composables'
 import {
-  getMemberOrderAPI,
+  getMemberOrderByIdAPI,
   getMemberOrderConsignmentByIdAPI,
+  getMemberOrderLogisticsByIdAPI,
   putMemberOrderReceiptByIdAPI,
 } from '@/services/order'
 import { onLoad, onReady } from '@dcloudio/uni-app'
 import { ref } from 'vue'
-import { OrderResult } from '@/types/order'
+import { LogisticItem, OrderResult } from '@/types/order'
 import { OrderState, orderStateList } from '@/services/constants'
 import { getPayMockAPI, getPayWxPayMiniPayAPI } from '@/services/pay'
 
@@ -76,12 +77,30 @@ onReady(() => {
 //获取订单详情
 const order = ref<OrderResult>()
 const getMemberOrderByIdData = async () => {
-  const res = await getMemberOrderAPI(query.id)
+  const res = await getMemberOrderByIdAPI(query.id)
   order.value = res.result
+  if (
+    [OrderState.DaiShouHuo, OrderState.DaiPingJia, OrderState.YiWanCheng].includes(
+      order.value.orderState,
+    )
+  ) {
+    console.log('获取物流信息成功')
+    getMemberOrderLogisticsByIdData()
+  } else {
+    console.log('获取物流信息失败，状态码：' + order.value.orderState)
+  }
+}
+
+//获取物流信息
+const LogisticsList = ref<LogisticItem[]>([])
+const getMemberOrderLogisticsByIdData = async () => {
+  const res = await getMemberOrderLogisticsByIdAPI(query.id)
+  LogisticsList.value = res.result.list
 }
 
 onLoad(() => {
   getMemberOrderByIdData()
+  console.log('onLoad')
 })
 
 //倒计时结束事件
@@ -117,6 +136,8 @@ const onOrderSend = async () => {
     })
     //主动更新订单状态
     order.value!.orderState = OrderState.DaiShouHuo
+    console.log('模拟发货完成，状态码：' + order.value!.orderState)
+    getMemberOrderByIdData()
   }
 }
 
@@ -130,6 +151,8 @@ const onOrderConfirm = () => {
         const res = await putMemberOrderReceiptByIdAPI(query.id)
         // 更新订单状态
         order.value = res.result
+        console.log('订单状态' + order.value.orderState)
+        getMemberOrderByIdData()
       }
     },
   })
@@ -205,16 +228,16 @@ const onOrderConfirm = () => {
       <!-- 配送状态 -->
       <view class="shipment">
         <!-- 订单物流信息 -->
-        <view v-for="item in 1" :key="item" class="item">
+        <view v-for="item in LogisticsList" :key="item.id" class="item">
           <view class="message">
-            您已在浙江省杭州市余杭区xx公寓完成取件，感谢使用菜鸟驿站，期待再次为您服务。
+            {{ item.text }}
           </view>
-          <view class="date"> 2023-04-14 13:14:20 </view>
+          <view class="date"> {{ item.time }} </view>
         </view>
         <!-- 用户收货地址 -->
         <view class="locate">
-          <view class="user"> 张三 13333333333 </view>
-          <view class="address"> 广东省 广州市 天河区 黑马程序员 </view>
+          <view class="user"> {{ order.receiverContact }}{{ order.receiverMobile }}</view>
+          <view class="address"> {{ order.receiverAddress }} </view>
         </view>
       </view>
 
