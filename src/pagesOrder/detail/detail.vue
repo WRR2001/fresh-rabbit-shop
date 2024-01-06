@@ -16,7 +16,10 @@ import { getPayMockAPI, getPayWxPayMiniPayAPI } from '@/services/pay'
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
 // 猜你喜欢
-const { guessRef, onScrolltolower } = useGuessList()
+const { guessRef } = useGuessList()
+// TODO
+// const { onScrolltolower } = useGuessList()
+
 // 弹出层组件
 const popup = ref<UniHelper.UniPopupInstance>()
 // 取消原因列表
@@ -188,7 +191,9 @@ const onOrderDelete = () => {
       <view class="title">订单详情</view>
     </view>
   </view>
-  <scroll-view scroll-y class="viewport" id="scroller" @scrolltolower="onScrolltolower">
+  <!-- TODO -->
+  <!-- <scroll-view scroll-y class="viewport" id="scroller" @scrolltolower="onScrolltolower"> -->
+  <scroll-view scroll-y class="viewport" id="scroller">
     <template v-if="order">
       <!-- 订单状态 -->
       <view class="overview" :style="{ paddingTop: safeAreaInsets!.top + 20 + 'px' }">
