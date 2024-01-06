@@ -49,10 +49,24 @@ const onOrderPay = async (id: string) => {
   const order = orderList.value.find((v) => v.id === id)
   order!.orderState = OrderState.DaiFaHuo
 }
+
+const isTriggered = ref(false)
+//下拉刷新
+const onRefresherrefresh = async () => {
+  isTriggered.value = true
+  await getMemberOrderData()
+  isTriggered.value = false
+}
 </script>
 
 <template>
-  <scroll-view scroll-y class="orders">
+  <scroll-view
+    scroll-y
+    class="orders"
+    refresher-enabled
+    @refresherrefresh="onRefresherrefresh"
+    :refresher-triggered="isTriggered"
+  >
     <view class="card" v-for="order in orderList" :key="order.id">
       <!-- 订单信息 -->
       <view class="status">
